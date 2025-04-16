@@ -1,0 +1,45 @@
+---
+import type { GetStaticPaths } from "astro";
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import RootLayout from "@/layouts/RootLayout.astro";
+
+type Props = {
+  post: CollectionEntry<"blog">;
+};
+
+export const getStaticPaths = (async () => {
+  const blogPosts = await getCollection("blog");
+
+  return blogPosts.map((post: any) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const { title, tags } = post.data;
+---
+
+<RootLayout content={{ title: `${title} | nawhgnues`, center: true }}>
+  <article
+    class="prose dark:prose-invert
+  prose-h1:font-bold prose-h1:text-xl prose-p:text-justify prose-img:rounded-xl"
+  >
+    <h3>{title}</h3>
+    <Content />
+    <div class="flex gap-2 mt-2">
+      {
+        tags?.map((tag: string) => (
+          <a
+            href={`/blog/tag/${tag}`}
+            class="text-xs transition-all hover:text-slate-800 dark:hover:text-slate-300 underline"
+          >
+            #{tag}
+          </a>
+        ))
+      }
+    </div>
+  </article>
+</RootLayout>

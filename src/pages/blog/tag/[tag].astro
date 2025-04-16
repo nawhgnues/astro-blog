@@ -1,0 +1,64 @@
+---
+import { getCollection } from "astro:content";
+import RootLayout from "@/layouts/RootLayout.astro";
+
+// ① 동적 경로 생성
+export async function getStaticPaths() {
+  const allPosts = await getCollection("blog");
+
+  const uniqueTags = Array.from(
+    new Set(allPosts.flatMap((post) => post.data.tags || []))
+  );
+
+  return uniqueTags.map((tag) => ({
+    params: { tag },
+  }));
+}
+
+// ② 현재 tag 가져오기
+const { tag } = Astro.params;
+const allPosts = await getCollection("blog");
+
+const filteredPosts = allPosts.filter((post) => post.data.tags?.includes(tag));
+---
+
+<RootLayout content={{ title: `${tag}  | nawhgnues` }}>
+  <div class="flex flex-col w-full">
+    <div class="flex flex-col gap-3 mb-4">
+      <a
+        href="/blog"
+        class="w-min text-3xl font-bold transition-all text-black underline dark:text-white hover:opacity-60"
+        >ALL</a
+      >
+      <p class="text-3xl font-bold text-gray-200 dark:text-gray-600">#{tag}</p>
+    </div>
+
+    {
+      filteredPosts.length === 0 ? (
+        <p>No posts found for tag "{tag}".</p>
+      ) : (
+        <ul class="flex flex-col gap-3">
+          {filteredPosts.map((post) => (
+            <li class="flex flex-col min-w-80 transition-all hover:bg-slate-50 dark:hover:bg-neutral-900 p-3 gap-2">
+              <a href={`/blog/${post.slug}`} class="flex flex-col gap-1">
+                <div class="text-xl">{post.data.title}</div>
+                <div class="text-sm">{post.data.description}</div>
+              </a>
+
+              <div class="flex gap-2 mt-1">
+                {post.data.tags?.map((tag: string) => (
+                  <a
+                    href={`/blog/tag/${tag}`}
+                    class="text-xs transition-all hover:text-slate-800 dark:hover:text-slate-300 underline"
+                  >
+                    #{tag}
+                  </a>
+                ))}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</RootLayout>

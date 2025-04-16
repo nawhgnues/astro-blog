@@ -1,0 +1,95 @@
+---
+import "../styles/global.css";
+import RootLayout from "../layouts/RootLayout.astro";
+import { AccordionComponent } from "@/components/Accordion";
+---
+
+<RootLayout content={{ title: "experience | nawhgnues", center: true }}>
+  <div class="flex flex-col gap-5">
+    <h3
+      class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0"
+    >
+      学歴
+    </h3>
+
+    <h4 class="scroll-m-20 text-xl font-semibold tracking-tight">朝鮮大学校</h4>
+    <p class="text-muted-foreground text-sm md:text-base">
+      電子工学専攻、パソコン工学副専攻
+    </p>
+
+    <h3
+      class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0"
+    >
+      資格
+    </h3>
+
+    <h4 class="scroll-m-20 text-base font-semibold tracking-tight">
+      情報処理技術
+    </h4>
+    <p class="text-muted-foreground text-sm md:text-base">
+      ITシステムの設計、開発、管理および運用に必要な基礎から応用までの幅広い知識を習得
+    </p>
+
+    <h4 class="scroll-m-20 text-base font-semibold tracking-tight">
+      日本語能力試験JLPT N2
+    </h4>
+    <p class="text-muted-foreground text-sm md:text-base">
+      日常生活に必要な日本語能力およびビジネス日本語の勉強
+    </p>
+
+    <h3
+      class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0"
+    >
+      経験
+    </h3>
+
+    <h4 class="scroll-m-20 text-base font-semibold tracking-tight">
+      (株)マイスター・ギルド
+    </h4>
+    <p class="text-muted-foreground text-sm md:text-base">
+      フロントエンド開発後
+    </p>
+
+    <AccordionComponent
+      title="商品券サービス"
+      description="コンポネント開発・テスト・アニメーション実装・性能改善"
+      client:load
+    />
+
+    <AccordionComponent
+      title="契約管理システム"
+      description="UI開発・コード最適化・他のメンバーサポート"
+      client:load
+    />
+
+    <AccordionComponent
+      title="社内書籍管理システム"
+      description="Firebase使い方復習・活用"
+      client:load
+    />
+
+    <AccordionComponent
+      title="マッチングアプリ"
+      description="モバイル開発・デプロイ"
+      client:load
+    />
+
+    <AccordionComponent
+      title="ライセンス管理システム"
+      description="全般的なマックアップ・UIコンポネント開発・レスポンシブル最適化"
+      client:load
+    />
+
+    <AccordionComponent
+      title="ラジオサービスリファクタリング"
+      description="レガシーコードリファクタリング・Build過程改善・文書化"
+      client:load
+    />
+
+    <AccordionComponent
+      title="AI 合成音声データサービス"
+      description="UIコンポネント開発・テスト・アニメーション開発・性能最適化"
+      client:load
+    />
+  </div>
+</RootLayout>

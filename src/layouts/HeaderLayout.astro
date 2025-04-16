@@ -1,0 +1,27 @@
+---
+import { ModeToggle } from "../components/ModeToggle";
+---
+
+<header class="w-full">
+  <nav>
+    <ul class="flex justify-between items-center gap-5">
+      <div class="flex gap-3">
+        <li>
+          <a class="text-xs transition-all hover:opacity-60 uppercase" href="/"
+            >about me</a>
+        </li>
+        <li>
+          <a
+            class="text-xs transition-all hover:opacity-60 uppercase"
+            href="/experience">experience</a>
+        </li>
+        <li>
+          <a
+            class="text-xs transition-all hover:opacity-60 uppercase"
+            href="/blog">blog</a>
+        </li>
+      </div>
+      <ModeToggle client:load />
+    </ul>
+  </nav>
+</header>
