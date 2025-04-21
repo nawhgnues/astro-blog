@@ -1,34 +1,48 @@
 ---
 import "../styles/global.css";
 import RootLayout from "../layouts/RootLayout.astro";
+import { getEntry } from "astro:content";
+
+const post = await getEntry({
+  collection: "index",
+  id: "index",
+});
+
+if (!post) {
+  throw new Error("index.mdx not found");
+}
+
+const {
+  title,
+  center,
+  intro,
+  points,
+  "important-title": importantTitle,
+} = post.data;
 ---
 
-<RootLayout content={{ title: "home | nawhgnues", center: true }}>
+<RootLayout content={{ title, center }}>
   <div>
     <h1
       class="scroll-m-20 text-2xl font-extrabold tracking-tight mb-3 lg:text-3xl"
     >
-      こんにちは
+      {intro.greeting}
     </h1>
     <h1 class="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl">
-      イスンファンです
+      {intro.name}
     </h1>
     <p class="leading-7 [&:not(:first-child)]:my-6">
-      フロントエンドが好きな3年目の開発者です
+      {intro.description}
     </p>
 
-    <p class="text-muted-foreground">大事にすること</p>
+    <p class="text-muted-foreground">{importantTitle}</p>
 
     <ul class="my-6 ml-6 list-disc [&>li]:mt-2">
-      <li class="text-xs md:text-base">
-        開発トレンドに取り残されないように継続的に学習しています
-      </li>
-      <li class="text-xs md:text-base">
-        可読性と保守性を意識してコードを書くよう心がけています
-      </li>
-      <li class="text-xs md:text-base">
-        性能的な部分を意識しながらコードを作成します
-      </li>
+      {
+        points.map((point: string) => (
+          <li class="text-xs md:text-base">{point}</li>
+        ))
+      }
     </ul>
   </div>
 </RootLayout>

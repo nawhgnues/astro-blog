@@ -10,13 +10,11 @@ const allPosts = await getCollection("blog");
     {
       allPosts.map((post) => (
         <li class="flex flex-col min-w-80 transition-all hover:bg-slate-50 dark:hover:bg-neutral-900 p-3 gap-3">
-          {/* post title/description 전체를 링크로 감싸려면 버튼/JSX 처리를 고려해야 함 */}
           <a href={`/blog/${post.slug}`} class="flex flex-col gap-1">
             <div class="text-xl">{post.data.title}</div>
             <div class="text-sm">{post.data.description}</div>
           </a>
 
-          {/* tags는 링크 바깥에 */}
           <div class="flex gap-2 mt-2">
             {post.data.tags?.map((tag: string) => (
               <a
