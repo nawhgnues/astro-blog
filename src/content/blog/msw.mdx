@@ -1,0 +1,38 @@
+---
+title: 백엔드 의존성, msw로 관리하기
+description: msw 사용해서 개발 & 테스트하기
+cover: ""
+publishedDate: 2024-04-21
+category: "Tech"
+tags: ["msw"]
+---
+
+<img src="https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbZatqg%2FbtsC9leGGOk%2FmGemU1ubyge48LiHW6MYak%2Fimg.png" />
+
+_백엔드 api가 안나와서 무작정 대기해야 하는 상황 😥_
+
+> **msw**를 사용하면 백엔드 api 개발 진행상황과 상관없이 프론트쪽의 개발을 진행할 수 있다
+
+### msw 란?
+
+msw(mock service worker)는 진짜 서버 없이도, 마치 서버가 있는 것처럼 개발하거나 테스트할 수 있게 해주는 도구이다.
+
+### 동작 원리 요약
+
+[http 요청] → [msw가 가로챔] → [mock 응답 반환]
+
+### 주요 개념 요약
+
+- setupWorker : 브라우저 상에서 개발 시 사용
+
+- setupServer : 테스트 환경에서 사용
+
+- handler : 특정 요청이 발생했을 때 이를 가로채서 지정된 함수(resolver)로 처리하는 규칙을 정의한 객체
+
+- APIServer : msw 서버를 설정하고, 요청을 가로채며, 테스트 후 핸들러를 초기화하는 객체
+
+이 외 api 및 사용 방법은 [공식 문서](https://mswjs.io/docs) 참고 🧐
+
+---
+
+실제 api 호출 없이도 프론트엔드 기능을 빠르게 개발・테스트 할 수 있어 상황에 맞게 사용한다면 생산성을 높일 수 있을 것 같다 😎
