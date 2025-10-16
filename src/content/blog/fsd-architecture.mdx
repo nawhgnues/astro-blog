@@ -1,0 +1,123 @@
+---
+title: FSD 아키텍처
+description: Feature-Sliced Design 아키텍처 알아보기
+cover: ""
+publishedDate: 2025-10-04
+category: "FSD"
+tags: ["react", "architecture"]
+---
+
+> 기능 중심으로 폴더 구조 나누기
+
+### ⚒️ 폴더구조 
+
+```
+src/
+├── app/              
+├── pages/            
+├── widgets/          ← 여러 feature들을 조합한 UI 블록 (재사용 가능)
+├── features/         ← 핵심 기능 단위 (작은 유즈케이스)
+├── entities/         ← 비즈니스 모델 단위 (유저, 게시글 등)
+├── shared/           ← 공통 요소 (UI 컴포넌트, 유틸, 타입 등)
+```
+
+- FSD는 Layer → Slice → Segment의 3단계 구조
+- Layer는 역할 단위(shared, entities, features, widgets, pages, app)
+- Slice는 특정 도메인(예: authByEmail), Segment는 세부 구현(ui, model, api)
+
+---
+
+### 📁 각 폴더 설명
+
+#### app
+- 앱 전체 설정 및 전역 상태 관리 (Redux, Tanstack query 등)
+#### Pages
+- 라우트 경로와 1:1로 매칭되는 컴포넌트 
+#### widgets
+- 화면을 구성하는 UI 블록 (헤더, 사이드 바 등)
+#### features
+- 사용자 인터랙션 중심 기능 (로그인 기능, 댓글 작성 기능 등)
+#### entities
+- 비즈니스 객체 중심
+#### shared
+- 공통 자원 (버튼, 인풋, 훅, 유틸 함수 등)
+
+---
+
+### ⭐️ 사용 예시
+
+#### 유저가 로그인 하는 기능 구현 시
+
+- 로그인 버튼 `shared/ui/Button` 에서 가져옴
+- 로그인 API 호출 로직은 `features/authByEmail` 에서 가져옴
+- 로그인 상태는 `entities/user` 에서 가져옴
+- 로그인 폼 UI는 `widgets/loginForm` 가져옴
+- 위의 모든 걸 `/login` 에서 조립 후 `pages/login` 에서 사용
+
+### 왜 위처럼 복잡하게 나누나?
+
+> UI·비즈니스 로직·API 호출이 한 기능 단위로 응집
+
+규모가 커질 수록 기능 기준 분리가 유지보수에 좋다는 의견이 많음.
+
+장점
+- 파일 위치 쉽게 파악가능
+- 여러 팀이 협업 할 때 충돌 줄일 수 있음
+- 관심사의 분리로 인해 테스트와 확장이 쉬움
+
+---
+
+### 🔍 유지보수, 확장성 비교
+
+```
+// 일반적인 리액트 구조
+src/
+├── components/
+│   ├── LoginForm.jsx
+│   └── Button.jsx
+├── hooks/
+│   └── useAuth.js
+├── api/
+│   └── authApi.js
+├── pages/
+│   └── LoginPage.jsx
+```
+
+위의 구조에서 로그인 API 가 바뀌고 로그인 폼에 이메일 입력란 검증 추가 하는 상황
+
+- **로그인 폼 UI 수정** → `components/LoginForm.jsx`
+- **API 함수 수정** → `api/authApi.js`
+- **인증 로직 훅 수정** → `hooks/useAuth.js`
+- **페이지에서 훅/폼 연결 확인** → `pages/LoginPage.jsx`
+
+로그인 기능 관련 파일이 흩어져있어서 수정할 때 모든 관련 파일 경로 찾아가며 대응해야함
+
+
+```
+// FSD 구조
+src/
+├── features/
+│   └── authByEmail/
+│       ├── ui/
+│       │   └── AuthForm.jsx
+│       ├── api/
+│       │   └── loginApi.js
+│       └── model/
+│           └── useAuthByEmail.js
+├── pages/
+│   └── login/
+│       └── LoginPage.jsx
+├── shared/
+│   └── ui/
+│       └── Button.jsx
+```
+
+- **로그인 폼 UI 수정** → `features/authByEmail/ui/AuthForm.jsx`
+- **API 함수 수정** → `features/authByEmail/api/loginApi.js`
+- **인증 로직 훅 수정** → `features/authByEmail/model/useAuthByEmail.js`
+- **페이지 연결** → `pages/login/LoginPage.jsx`
+
+- 로그인 기능 관련 코드가 한 폴더 `features/authByEmail/`에 모여 있어서 어디를 수정해야 할지 바로 알 수 있음
+- 기능 단위로 폴더가 명확하게 분리되어 파일을 찾는 시간 절약
+- 관련 없는 코드와 분리되어 있기 때문에 헷갈릴 일이 적음
+- 다른 기능과 독립적으로 개발/테스트/배포 가능
